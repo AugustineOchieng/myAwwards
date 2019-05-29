@@ -13,7 +13,16 @@ class Project(models.Model):
   description = models.CharField(max_length=100)
   sample_img = models.ImageField(upload_to='landing_page/')
 
- 
+  @classmethod
+  def search_by_title(cls,search_term):
+      sample_img = cls.objects.filter(title__icontains=search_term)
+      return sample_img
+
+  @classmethod
+  def search_by_title(cls,search_term):
+      sample_img = cls.objects.filter(category__icontains = search_term)
+      return sample_img
+
 
   def __str__(self):
         return self.title
@@ -23,12 +32,12 @@ class Profile(models.Model):
   bio = models.CharField(max_length=100)
   project = models.ForeignKey(Project)
   contact = models.CharField(max_length=30)
-  user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+  user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
 
 class Comment(models.Model):
-  project = models.ForeignKey(Project)
+  project_id = models.IntegerField(default=0) 
   # reply = models.ForeignKey('self', null=True, related_name='replies')
-  content = models.TextField(max_length=100)
+  content = HTMLField()
   date_posted = models.DateTimeField(default=timezone.now)
   user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='replicate')
   def __str__(self):
