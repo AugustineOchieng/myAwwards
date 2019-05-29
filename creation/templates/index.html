@@ -1,15 +1,38 @@
 {%extends 'base.html'%}
 
 {% block content %}
-<div class="jumbotron bg-cover text-white"
+<div class="jumbotron bg-cover "
 
-  style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%), url(https://www.larutadelsorigens.cat/filelook/full/70/702507/dark-car-wallpaper.jpg)">
+  style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%),
+  url(http://s1.1zoom.me/b5050/869/346634-admin_2880x1800.jpg)">
   <div class="container">
     <h1 class="display-4">Awwwards</h1>
+  <div class="circles">
+    <div class="first circle">
+      <span>no <br> animation</span>
+    </div>
+
+    <div class="second circle">
+      <strong></strong>
+      <span>animation <br> progress</span>
+    </div>
+
+    <div class="third circle">
+      <strong></strong>
+      <span>value <br> progress</span>
+    </div>
+
+    <div class="forth circle">
+      <span>custom angle, <br> value update</span>
+    </div>
+
+   
+  </div>
+
 
     <hr class="my-4">
 
-    <a class="point btn-lg text-white" href="/search" role="button">Search Project</a>
+    <a class="point btn-lg text-dark" href="/search" role="button">Search Project</a>
   </div>
 </div>
 {{block.super}}
@@ -22,7 +45,7 @@
 
   <!-- Card image -->
   <div class="view overlay">
-    <img class="card-img-top" src="{{project.sample_img.url}}" alt="Card image cap" height="300px" >
+    <img class="card-img-top" src="{{project.sample_img.url}}" alt="Card image cap" height="350px" width="300px">
     <a>
       <div class="mask rgba-white-slight"></div>
     </a>
@@ -61,4 +84,53 @@
 
 {% endfor %}
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://rawgit.com/kottenator/jquery-circle-progress/1.2.2/dist/circle-progress.js"></script>
+ <script>
+ (function($) {
+
+ $('.first.circle').circleProgress({
+ value: 0.35,
+ animation: false,
+ fill: {gradient: ['#ff1e41', '#ff5f43']}
+ });
+
+
+ $('.second.circle').circleProgress({
+ value: 0.6
+ }).on('circle-animation-progress', function(event, progress) {
+ $(this).find('strong').html(Math.round(100 * progress) + '<i>%</i>');
+ });
+
+
+ $('.third.circle').circleProgress({
+ value: 0.75,
+ fill: {gradient: [['#0681c4', .5], ['#4ac5f8', .5]], gradientAngle: Math.PI / 4}
+ }).on('circle-animation-progress', function(event, progress, stepValue) {
+ $(this).find('strong').text(stepValue.toFixed(2).substr(1));
+ });
+
+
+ var c4 = $('.forth.circle');
+
+ c4.circleProgress({
+ startAngle: -Math.PI / 4 * 3,
+ value: 0.5,
+ lineCap: 'round',
+ fill: {color: '#ffa500'}
+ });
+
+ 
+ setTimeout(function() { c4.circleProgress('value', 0.7); }, 1000);
+ setTimeout(function() { c4.circleProgress('value', 1.0); }, 1100);
+ setTimeout(function() { c4.circleProgress('value', 0.5); }, 2100);
+
+ 
+ $('.fifth.circle').circleProgress({
+ value: 0.7
+ 
+ });
+ })(jQuery);
+
+ </script>
 {% endblock %}

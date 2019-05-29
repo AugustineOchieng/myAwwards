@@ -4,10 +4,18 @@
 {% block content %}
 
 {{block.super}}
-{% for project in projects %}
+{% for project in single %}
+<div class="jumbotron bg-cover " style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%),
+  url({{project.sample_img.url}})">
+  <div class="container">
+    <h1 class="display-4">{{project.title}}</h1>
+    </div>
+    </div>
+    <div class="row">
+      <div class="col-md-8">
 <!-- Card -->
 <div class="card card-image"
-  style="background-image: url(https://mdbootstrap.com/img/Photos/Horizontal/Work/4-col/img%20%2814%29.jpg);">
+  style="background-image: url({{project.sample_img.url}});">
 
   <!-- Content -->
   <div class="text-white text-center d-flex align-items-center rgba-black-strong py-5 px-4">
@@ -16,6 +24,9 @@
       <h3 class="card-title pt-2"><strong> <a href="{{project.link}}"> {{project.link}} </a> </strong></h3>
       <br>
       <p>{{project.description}}</p>
+       <a href="new_comment/{{project.id}}">
+         <h1>Leave a comment</h1>
+       </a>
       <a href="{{project.link}}" class="btn btn-pink"><i class="fas fa-clone left"></i> View project</a>
       <a href="/voter{{project}}" method="post">Vote Up</a>
     </div> {{form.media}}
@@ -26,49 +37,50 @@
 </div>
 <!-- Card -->
 
-<div class="review-section">
-  {% for review in reviews %}
-  {% if project.id == review.project.id %}
+</div>
 
-  <p><strong>{{review.juror}}</strong> {{review.comment}} [usability: {{review.usability}}, content:
-    {{review.content}} , design: {{review.design}}]</p>
-  <p>{{ project.average_score | floatformat }}</p>
-  {% endif %}
-
-  {%endfor%}
 
 
   {{form.media}}
   <hr>
-  <form action="" method="post" enctype="multipart/form-data" id="sema">
-    {%csrf_token%}
-
-    {%bootstrap_form form%}
-
-
-
-  </form>
+  
 
   {% endfor %}
 
-  <a href="/new_comment">
-    <h1>Leave a comment</h1>
-  </a>
-  <p>Total no. of comments {{project.comments.count}}</p>
-  {% for comment in comments %}
-  <p> {{comment.date_posted}} </p>
-  <p> {{comment.content}} </p>
-  <p> {{comment.user}} </p>
-  {% empty %}
-  <p>There is no comments</p>
-  {% endfor %}
-  <form action="" method="post" enctype="multipart/form-data" id="sema">
+ <div class="col-md-4">
+  
+  <form action="{%url 'comments'%}" method="post" enctype="multipart/form-data">
     {%csrf_token%}
 
-    {%bootstrap_form form%}
-
-
-
+    {% bootstrap_form form%}
+    <input type="submit" class="btn btn-info btn-lg" value="Post">
   </form>
+  </div>
+  </div>
+  <br><br>
+  <div class="row">
+<div class="col-md-6" id="close">
+  {% for proj in project %}
+ <a href="new_comment/{{project.id}}">
+   <h1>Leave a comment</h1>
+ </a>
+{% endfor %}
+
+</div>
+<div class="col-md-6">
+  
+   <p>Total no. of comments {{project.comments.count}}</p>
+   {% for comment in comments %}
+   <p> {{comment.date_posted}} </p>
+   <p> {{comment.content}} </p>
+   <p> {{comment.user}} </p>
+   {% empty %}
+   <p>There is no comments</p>
+   {% endfor %}
+   </form>
+   </div>
+   </div>
+   
 
   {% endblock %}
+  

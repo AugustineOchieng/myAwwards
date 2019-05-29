@@ -13,9 +13,9 @@
 </div>
 {{block.super}}
 {% for profile in profiles %}
-<h2> {{profile.title}}</h2>
-<h2>{{profile.link}}</h2>
-<h2>{{profile.description}}</h2>
+<h2> {{profile.user}}</h2>
+<h2>{{profile.bio}}</h2>
+<h2>{{profile.project}}</h2>
 <img src="{{profile.profile_picture.url}}" alt="landing page">
 {% endfor %}
 {% endblock %}
