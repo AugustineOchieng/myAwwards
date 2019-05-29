@@ -1,0 +1,1 @@
+web: awwards.wsgi --log-file -
