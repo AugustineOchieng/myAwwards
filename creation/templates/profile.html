@@ -1,0 +1,21 @@
+{%extends 'base.html'%}
+
+{% block content %}
+<div class="jumbotron bg-cover text-white"
+  style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%), url(https://placeimg.com/1000/480/nature)">
+  <div class="container">
+    <h1 class="display-4">Awwwards</h1>
+
+    <hr class="my-4">
+
+    <a class="point btn-lg text-white" href="/edit_profile" role="button">Edit Profile</a>
+  </div>
+</div>
+{{block.super}}
+{% for profile in profiles %}
+<h2> {{profile.title}}</h2>
+<h2>{{profile.link}}</h2>
+<h2>{{profile.description}}</h2>
+<img src="{{profile.profile_picture.url}}" alt="landing page">
+{% endfor %}
+{% endblock %}
