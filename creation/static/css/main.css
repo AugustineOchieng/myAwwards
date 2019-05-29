@@ -1,6 +1,7 @@
 body {
   font-family: 'Josefin Slab',
     serif;
+    text-align: center;
 }
 
 .bg-cover {
@@ -15,5 +16,54 @@ body {
   background-image: linear-gradient(315deg, #ffcfdf 0%, #b0f3f1 74%);
 }
 .jumbotron{
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.6) 100%)
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.6) 100%);
+  color: white;
+}
+.circles {
+  margin-bottom: -10px;
+}
+
+.circle {
+  width: 100px;
+  margin: 6px 6px 20px;
+  display: inline-block;
+  position: relative;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.circle canvas {
+  vertical-align: top;
+}
+
+.circle strong {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  line-height: 40px;
+  font-size: 30px;
+}
+
+.circle strong i {
+  font-style: normal;
+  font-size: 0.6em;
+  font-weight: normal;
+}
+
+.circle span {
+  display: block;
+  color: white;
+  margin-top: 12px;
+}
+
+p {
+  margin: 40px 0;
+}
+#close{
+  margin-right: 50px;
+}
+.instaform{
+  text-align: center;
 }

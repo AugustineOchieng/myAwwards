@@ -1,10 +1,11 @@
 nav{
-background-color: #663dff;
-background-image: linear-gradient(319deg, #663dff 0%, #aa00ff 37%, #cc4499 100%);
+background-color: #f9ea8f;
+background-image: linear-gradient(315deg, #f9ea8f 0%, #aff1da 74%);
+color: black;
 }
 .point{
 
-    background-color: #663dff;
-    background-image: linear-gradient(319deg, #663dff 0%, #aa00ff 37%, #cc4499 100%);
-
+    background-color: #f9ea8f;
+    background-image: linear-gradient(315deg, #f9ea8f 0%, #aff1da 74%);
+    color: black;
 }
