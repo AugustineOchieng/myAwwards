@@ -6,6 +6,12 @@ from django.contrib.auth.decorators import login_required
 from .models import Project, Profile, Comment
 from .forms import NewProfileForm, NewProjectForm, CommentForm, VoteForm
 from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializer import ProfileSerializer
+from .serializer import ProjectSerializer
+from rest_framework import status
+
 @login_required(login_url='/accounts/login/')  
 def home(request):
   context = {
@@ -15,10 +21,10 @@ def home(request):
 
 @login_required(login_url='/accounts/login/')  
 def comment(request):
-  contextual = {
+    contextual = {
     'comments': Comment.objects.all()
-  }
-  return render(request, 'single_project.html', contextual)
+    }
+    return render(request, 'comments.html', contextual)
 # @login_required(login_url='/accounts/login/')
 # def profile(request):
 #   context = {
@@ -44,7 +50,7 @@ def new_project(request):
 def edit_profile(request):
     current_user = request.user
     if request.method == 'POST':
-        user = Profile.objects.get(user=request.user)
+        user = Profile.objects.filter(user=request.user).first()
         form = NewProfileForm(request.POST, request.FILES, instance=user)
         profile = Profile.objects.filter(user_id =current_user.id)
         if form.is_valid():
@@ -59,7 +65,7 @@ def profile(request):
     # images = Image.objects.filter(profile = current_user)
 
     try:
-        profiles = Profile.objects.get(user=current_user)
+        profiles = Profile.objects.filter(user=current_user)
     except ObjectDoesNotExist:
         return redirect('new_profile')
 
@@ -74,27 +80,31 @@ def new_profile(request):
             profile.user = current_user
             profile.userId = request.user.id
             profile.save()
-        return redirect('NewProfile')
+        return redirect('index')
 
     else:
         form = NewProfileForm()
         return render(request, 'new_profile.html', {"form": form})
      
 @login_required(login_url='/accounts/login/')  
-def new_comment(request):
+def new_comment(request, id):
+    project = Project.objects.filter(id=id)
     current_user = request.user
     if request.method == 'POST':
         form = CommentForm(request.POST, request.FILES)
         if form.is_valid():
-            comment = form.save(commit=False)
-            comment.user = current_user
-            # project.poster_id = current_user.id
-            comment.save()
-        return redirect('single_p')
+            form = form.save(commit=False)
+            form.project_id = id
+            form.save()
+        return redirect('one_project', id)
 
     else:
         form = CommentForm()
-    return render(request, 'new_comment.html', {"form": form})
+    try:
+        user_comment = Comment.objects.filter(project_id=id)
+    except Exception as e:
+        raise Http404()
+    return render(request, 'new_comment.html', {"project":project, "current_user":current_user, "form": form})
 
 def single_project(request):
     context = {
@@ -114,7 +124,7 @@ def voter(request):
     return render(request, 'vote.html', {'form': form, 'message': message})
 def single(request,single_id):
     try:
-        index_path = Project.objects.filter(id = single_id)
+        single = Project.objects.filter(id = single_id)
     except DoesNotExist:
         raise Http404()
     if request.method == 'POST':
@@ -127,24 +137,38 @@ def single(request,single_id):
         form =  VoteForm()
 
     return render(request, "single_project.html", locals())
-@login_required(login_url='/accounts/login/')
-def add_review(request,pk):
-   project = get_object_or_404(Project, pk=pk)
-   current_user = request.user
-   if request.method == 'POST':
-       form = ReviewForm(request.POST)
-       if form.is_valid():
-           design = form.cleaned_data['design']
-           usability = form.cleaned_data['usability']
-           content = form.cleaned_data['content']
-           review = form.save(commit=False)
-           review.project = project
-           review.juror = current_user
-           review.design = design
-           review.usability = usability
-           review.content = content
-           review.save()
-           return redirect('one_page')
-   else:
-       form = ReviewForm()
-       return render(request,'review.html',{"user":current_user,"form":form})
+def search_results(request):
+
+    if 'title' in request.GET and request.GET["title"]:
+        search_term = request.GET.get("title")
+        searched_single = Project.search_by_title(search_term)
+        message = f"{search_term}"
+
+        return render(request, 'search.html',{"message":message,"single": searched_single})
+
+    else:
+        message = "You haven't searched for any term"
+        return render(request, 'search.html',{"message":message})
+class Projecter(APIView):
+    def get(self, request, format=None):
+        project = Project.objects.all()
+        serializers = ProjectSerializer(project, many=True)
+        return Response(serializers.data)
+    def post(self, request, format=None):
+        serializers = ProjectSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class Profilel(APIView):
+    def get(self, request, format=None):
+        profile = Profile.objects.all()
+        serializers = ProfileSerializer(profile, many=True)
+        return Response(serializers.data)
+    def post(self, request, format=None):
+        serializers = ProfileSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
