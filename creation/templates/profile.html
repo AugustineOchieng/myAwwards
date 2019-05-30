@@ -13,12 +13,16 @@
 </div>
 {{block.super}}
 {% for profile in profiles %}
-<h2> {{profile.user}}</h2>
-<h2>{{profile.bio}}</h2>
-<h2>{{profile.project}}</h2>
 <div class="avatar mx-auto white">
   <img src="{{profile.profile_picture.url}}" class="rounded-circle" alt="avatar" height="30%">
 </div>
+{% endfor %}
 
+{% for profile in profiles %}
+<h2> {{profile.user}}</h2>
+<h2>{{profile.bio}}</h2>
+<h2>{{profile.project}}</h2>
+
+<h2>{{profile.contact}}</h2>
 {% endfor %}
 {% endblock %}
