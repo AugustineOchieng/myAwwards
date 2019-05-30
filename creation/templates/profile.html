@@ -16,6 +16,9 @@
 <h2> {{profile.user}}</h2>
 <h2>{{profile.bio}}</h2>
 <h2>{{profile.project}}</h2>
-<img src="{{profile.profile_picture.url}}" alt="landing page">
+<div class="avatar mx-auto white">
+  <img src="{{profile.profile_picture.url}}" class="rounded-circle" alt="avatar" height="30%">
+</div>
+
 {% endfor %}
 {% endblock %}

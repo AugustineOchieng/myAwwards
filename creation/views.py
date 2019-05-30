@@ -60,12 +60,12 @@ def edit_profile(request):
         form = NewProfileForm()
     return render(request, 'edit_profile.html', {'form': form})
 @login_required(login_url='/accounts/login/')  
-def profile(request):
+def profile(request, id):
     current_user = request.user
     # images = Image.objects.filter(profile = current_user)
 
     try:
-        profiles = Profile.objects.filter(user=current_user)
+        profiles = Profile.objects.filter(user=id)
     except ObjectDoesNotExist:
         return redirect('new_profile')
 
@@ -148,7 +148,46 @@ def search_results(request):
 
     else:
         message = "You haven't searched for any term"
-        return render(request, 'search.html',{"message":message})
+        return render(request, 'search.html', {"message": message})
+
+
+# def prof(request,user_id):
+#     try:
+#         prof = Profile.objects.filter(id = user)
+#     except DoesNotExist:
+#         raise Http404()
+#     if request.method == 'POST':
+#         form = UploadForm(request.POST,request.FILES)
+
+#         if form.is_valid():
+#             form.save()
+#             return redirect('profile')
+#     else:
+#         form =  VoteForm()
+
+#     return render(request, "profile.html", locals())
+
+# @login_required(login_url='/accounts/login/')  
+# def prof(request, user_id):
+#     current_user = request.user
+    
+
+#     try:
+#         profs = Profile.objects.filter(id=user_id)
+#     except DoesNotExist:
+#         raise Http404()
+#     if request.method == 'POST':
+#         form = UploadForm(request.POST,request.FILES)
+
+#         if form.is_valid():
+#             form.save()
+#             return redirect('profile')
+#     else:
+#         form =  VoteForm()
+
+#     return render(request, "profile.html", locals())
+
+
 class Projecter(APIView):
     def get(self, request, format=None):
         project = Project.objects.all()

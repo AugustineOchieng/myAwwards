@@ -18,21 +18,19 @@ class Project(models.Model):
       sample_img = cls.objects.filter(title__icontains=search_term)
       return sample_img
 
-  @classmethod
-  def search_by_title(cls,search_term):
-      sample_img = cls.objects.filter(category__icontains = search_term)
-      return sample_img
-
 
   def __str__(self):
         return self.title
 
 class Profile(models.Model):
+  
   profile_picture = models.ImageField(upload_to='profiel_pic/')
   bio = models.CharField(max_length=100)
   project = models.ForeignKey(Project)
   contact = models.CharField(max_length=30)
-  user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+  user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+  def __str__(self):
+        return self.user
 
 class Comment(models.Model):
   project_id = models.IntegerField(default=0) 
