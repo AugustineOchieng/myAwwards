@@ -144,7 +144,7 @@ def search_results(request):
         searched_single = Project.search_by_title(search_term)
         message = f"{search_term}"
 
-        return render(request, 'search.html',{"message":message,"single": searched_single})
+        return render(request, 'search.html',{"message":message,"singlet": searched_single})
 
     else:
         message = "You haven't searched for any term"
