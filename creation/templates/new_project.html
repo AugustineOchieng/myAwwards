@@ -1,40 +1,120 @@
+{%extends 'base.html'%}
 {% load bootstrap4 %}
-{% load staticfiles %}
-<!DOCTYPE html>
-<html>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+{% block content %}
 
-  <title>Add Project</title>
-  {{form.media}}
+<div class="jumbotron bg-cover " style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%),
+  url(http://s1.1zoom.me/b5050/869/346634-admin_2880x1800.jpg)">
+  <div class="container">
+    <h1 class="display-4">Awwwards</h1>
+    <div class="circles">
+      <div class="first circle">
+        <span>no <br> animation</span>
+      </div>
 
-  {% block styles %}
-  {% bootstrap_css %}
-  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-  {% endblock %}
+      <div class="second circle">
+        <strong></strong>
+        <span>animation <br> progress</span>
+      </div>
 
-</head>
+      <div class="third circle">
+        <strong></strong>
+        <span>value <br> progress</span>
+      </div>
 
-<body>
-  <p class="instaform">Add a new Project</p>
-  <div class="container" style="margin-top:30px">
-    <div class="jumbotron">
+      <div class="forth circle">
+        <span>custom angle, <br> value update</span>
+      </div>
 
-      <form action="{%url 'new_post'%}" method="post" enctype="multipart/form-data">
-        {%csrf_token%}
 
-        {% bootstrap_form form%}
-        <input type="submit" class="btn btn-info btn-lg" value="Post">
-      </form>
-
-      {% block scripts %}
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-      {% bootstrap_javascript %}
-      {% endblock %}
     </div>
-  </div>
-</body>
 
-</html>
+
+    <hr class="my-4">
+
+    <a class="point btn-lg text-dark" href="/search" role="button">Search Project</a>
+  </div>
+</div>
+{{block.super}}
+<div class="row">
+  <h2>Add a Comment</h2>
+
+
+  <form action="{%url 'new_post'%}" method="post" enctype="multipart/form-data">
+    {%csrf_token%}
+
+    {% bootstrap_form form%}
+    <input type="submit" class="btn btn-info btn-lg" value="Post">
+  </form>
+
+  {% block scripts %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  {% bootstrap_javascript %} {% endblock %}
+</div>
+</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://rawgit.com/kottenator/jquery-circle-progress/1.2.2/dist/circle-progress.js"></script>
+<script>
+  (function ($) {
+
+    $('.first.circle').circleProgress({
+      value: 0.35,
+      animation: false,
+      fill: {
+        gradient: ['#ff1e41', '#ff5f43']
+      }
+    });
+
+
+    $('.second.circle').circleProgress({
+      value: 0.6
+    }).on('circle-animation-progress', function (event, progress) {
+      $(this).find('strong').html(Math.round(100 * progress) + '<i>%</i>');
+    });
+
+
+    $('.third.circle').circleProgress({
+      value: 0.75,
+      fill: {
+        gradient: [
+          ['#0681c4', .5],
+          ['#4ac5f8', .5]
+        ],
+        gradientAngle: Math.PI / 4
+      }
+    }).on('circle-animation-progress', function (event, progress, stepValue) {
+      $(this).find('strong').text(stepValue.toFixed(2).substr(1));
+    });
+
+
+    var c4 = $('.forth.circle');
+
+    c4.circleProgress({
+      startAngle: -Math.PI / 4 * 3,
+      value: 0.5,
+      lineCap: 'round',
+      fill: {
+        color: '#ffa500'
+      }
+    });
+
+
+    setTimeout(function () {
+      c4.circleProgress('value', 0.7);
+    }, 1000);
+    setTimeout(function () {
+      c4.circleProgress('value', 1.0);
+    }, 1100);
+    setTimeout(function () {
+      c4.circleProgress('value', 0.5);
+    }, 2100);
+
+
+    $('.fifth.circle').circleProgress({
+      value: 0.7
+
+    });
+  })(jQuery);
+</script>
+{% endblock %}
